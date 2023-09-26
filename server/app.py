@@ -2,7 +2,7 @@
 
 from flask import Flask, make_response, jsonify, request
 from flask_migrate import Migrate
-from flask_cors import CORS
+
 
 from models import db, Power, Hero, hero_powers
 
@@ -10,7 +10,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:4000", "methods": ["GET", "POST"], "allow_headers": ["Content-Type"]}})
 
 migrate = Migrate(app, db)
 
@@ -18,7 +17,7 @@ db.init_app(app)
 
 @app.route('/')
 def home():
-    return 'ygyuhij8y9uioipo'
+    return 'Heroes'
 
 @app.route('/heroes', methods=['GET'])
 def get_heroes():
