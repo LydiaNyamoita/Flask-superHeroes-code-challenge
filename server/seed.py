@@ -1,5 +1,5 @@
 from random import randint
-from app.app import app
+from server.app import app
 
 from models import db, Power, Hero, HeroPower
 
