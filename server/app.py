@@ -110,30 +110,30 @@ def create_hero_power():
     try:
         data = request.get_json()
 
-        # Check if the required fields are present in the request data
+        
         if "strength" not in data or "power_id" not in data or "hero_id" not in data:
             return jsonify({"errors": ["strength, power_id, and hero_id are required fields"]}), 400
 
-        # Retrieve the Hero and Power objects based on the provided IDs
+        
         hero = Hero.query.get(data["hero_id"])
         power = Power.query.get(data["power_id"])
 
-        # Check if the Hero and Power exist
+        
         if not hero or not power:
             return jsonify({"errors": ["Hero or Power not found"]}), 404
 
-        # Create a new HeroPower association
+        
         hero_powers_association = hero_powers.insert().values(
             strength=data["strength"],
             hero_id=data["hero_id"],
             power_id=data["power_id"]
         )
 
-        # Add the HeroPower association to the database
+        
         db.session.execute(hero_powers_association)
         db.session.commit()
 
-        # Fetch the updated Hero data including associated Powers
+        
         updated_hero = Hero.query.get(data["hero_id"])
         hero_data = {
             "id": updated_hero.id,
@@ -149,10 +149,10 @@ def create_hero_power():
             ]
         }
 
-        return jsonify(hero_data), 201  # 201 Created status code for successful creation
+        return jsonify(hero_data), 201  
 
     except Exception as e:
-        return jsonify({"errors": [str(e)]}), 500  # Handle any unexpected errors
+        return jsonify({"errors": [str(e)]}), 500  
 
 
 
