@@ -14,59 +14,36 @@ hero_powers = db.Table(
 )
 
 @validates('strength')
-def validate_strength(self,key,strength):
-    if strength not in ('Strong','Weak','Average'):
-        raise ValueError('Strength should either be Strong,Weak orAverage')
+def validate_strength(self, key, strength):
+    if strength not in ('Strong', 'Weak', 'Average'):
+        raise ValueError('Strength should either be Strong, Weak, or Average')
     return strength
-
 
 class Hero(db.Model):
     __tablename__ = 'heros'
 
     id = db.Column(db.Integer, primary_key=True)
-    name= db.Column(db.String)
+    name = db.Column(db.String)
     super_name = db.Column(db.String)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     powers = db.relationship('Power', secondary=hero_powers, backref='heroes')
 
-
-
-''''class HeroPower(db.Model):
-    __tablename__ = 'hero_powers'
-
-    id = db.Column(db.Integer, primary_key=True)
-    strength = db.Column(db.String)
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-
-    hero_id = db.Column(db.Integer, db.ForeignKey('heros.id'))
-    power_id = db.Column(db.Integer, db.ForeignKey('powers.id'))'''
-
-
-
-
 class Power(db.Model):
-    __tablename__ = 'powers'
+    __tablename__ = 'powers'  # Corrected the typo here
 
     id = db.Column(db.Integer, primary_key=True)
-    name= db.Column(db.String)
+    name = db.Column(db.String)
     description = db.Column(db.String)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-
+    
+    def __repr__(self):  # Corrected the typo in __repr__
+        return f"Name: {self.name}, Description: {self.description}"
 
     @validates('description')
-    def validate_descriprion(self,key,description):
+    def validate_description(self, key, description):  # Corrected the typo in the function name
         if not description or len(description) < 20:
-            raise ValueError("Description cannot be null or less than 20 characters. ")
+            raise ValueError("Description cannot be null or less than 20 characters.")
         return description
-
-
-
-
-
-   
-
-    

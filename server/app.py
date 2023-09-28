@@ -82,25 +82,44 @@ def get_power_by_id(id):
 
 
 
+from flask import Flask, jsonify, request
+
+# ... (Your other imports and code)
+
 @app.route('/powers/<int:id>', methods=['PATCH'])
 def patch_power_by_id(id):
-    power = Power.query.filter_by(id=id).first()
-    if not power:
-        return jsonify({'error': 'Power not found'}), 404
-    
-    for attr in request.json:
-        setattr(power, attr,request.json.get(attr))
+    try:
+        power = Power.query.filter_by(id=id).first()
+        if not power:
+            return jsonify({'error': 'Power not found'}), 404
 
-        db.session.add(power)
-        db.session.commit()
-    
-    power_data = {
-        'id': power.id,
-        'name': power.name,
-        'description': power.description,
+        data = request.get_json()
 
-    }
-    return jsonify(power_data)
+        if 'description' in data:
+            new_description = data['description']
+
+            
+            if not new_description or len(new_description) < 20:
+                return jsonify({'errors': ['Description must be at least 20 characters long']}), 400
+
+            
+            power.description = new_description
+
+            
+            db.session.commit()
+
+            
+            power_data = {
+                'id': power.id,
+                'name': power.name,
+                'description': power.description,
+            }
+            return jsonify(power_data), 200
+        else:
+            return jsonify({'error': 'Description field is required'}), 400
+
+    except Exception as e:
+        return jsonify({'errors': [str(e)]}), 500
 
 
 
