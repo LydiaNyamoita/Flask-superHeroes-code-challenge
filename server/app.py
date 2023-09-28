@@ -100,7 +100,7 @@ def patch_power_by_id(id):
 
             
             if not new_description or len(new_description) < 20:
-                return jsonify({'errors': ['Description must be at least 20 characters long']}), 400
+                return jsonify({'errors': ["validation errors"]}), 400
 
             
             power.description = new_description
